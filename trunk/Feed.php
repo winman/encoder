@@ -37,10 +37,19 @@ class Encoder_Feed {
         
         foreach ($feed as $entry) {
             preg_match('/Exploit String: <\/b>(.*)<br><b>Exploit Tags:/ism', $entry->description, $matches);
+            $matches[1] = $this->replaceBRTags($matches[1]);
             $options .= '<option value="'.htmlspecialchars($matches[1]).'">' . $entry->title . '</option>';
         } 
         
         return $options;         
+    }
+
+    public function replaceBRTags($string) {
+        
+        $string = str_replace('<br>', "\n", $string);
+        $string = str_replace('<br/>', "\n", $string);
+        
+        return $string;
     }
     
     /**
