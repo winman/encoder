@@ -17,10 +17,9 @@ require 'Request.php';
 # fetch the vectors from the xssDB
 $Feed = new Encoder_Feed;
 $Feed->setFeedUrl(
-    'http://xssdb.dabbledb.com/publish/xssdb/e31f5ab5-eb91-4bc4-b5a2-9e7a994483f1/xssdbtestview01.rss'
+    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
     );
 $options = $Feed->createHTMLOptions(); 
-
 
 # handle incoming requests
 $Request = new Encoder_Request;
@@ -33,21 +32,22 @@ $Request->response['outputtext'];
 
 #generate the HTML
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>PHP charset encoder</title>
+		<title>PHP Charset Encoder</title>
 		<link rel="Stylesheet" type="text/css" href="styles/style.css" />
-		<script type="text/javascript" language="javascript" src="scripts/encode.js"></script>
+		<script type="text/javascript" src="scripts/encode.js"></script>
 	</head>
 	<body>
 		<div>
-			<h1>PHP charset encoder</h1>
+			<h1><span class="red">PHP</span> <span class="small">Charset Encoder</span></h1>
 		</div>
-		<div>
+		<div id="info">
 			This tool helps you encoding arbitrary texts to and from various charsets. Also some encoding functions featured by 
-			javascript are provided. Feel free to give <a href="mailto:mario.heiderich@gmail.com">feedback</a> if you are missing something or if you found a bug.
+			JavaScript are provided. Feel free to give <a href="mailto:mario.heiderich@gmail.com">feedback</a> if you are missing something or if you found a bug.
 		</div>
 		<div>
 			<form method="post" action="index.php">
@@ -172,50 +172,52 @@ $Request->response['outputtext'];
 					</select>
 				</fieldset>
 				<fieldset>
-					<div>
-						<label for="input-text"><strong>input</strong></label> 
-						<button type="button" id="input-to-charcode" onclick="Encoder.toCharCode('input');">toCharCode()</button> 
-						<button type="button" id="input-to-urlencode" onclick="Encoder.toUrlEncode('input');">encodeURIComponent()</button> 
-						<button type="button" id="input-from-charcode" onclick="Encoder.fromCharCode('input');" disabled="disabled">fromCharCode()</button>
-						<button type="button" id="input-from-urlencode" onclick="Encoder.fromUrlEncode('input');" disabled="disabled">decodeURIComponent()</button> 
-                        <nowrap> 
-                            <label>entities:</label>                        
-                            <button type="button" id="input-to-dec-ent" onclick="Encoder.toDecEnt('input');">to DEC</button>
-                            <button type="button" id="input-to-hex-ent" onclick="Encoder.toHexEnt('input');">to HEX</button>
-                            <button type="button" id="input-to-dec-ent" onclick="Encoder.fromDecEnt('input');">from DEC</button>
-                            <button type="button" id="input-to-hex-ent" onclick="Encoder.fromHexEnt('input');">from HEX</button>  						
-                        </nowrap>
-                        <nowrap> 
-                            <label>vectors:</label>
-                            <select onchange="Encoder.fromVectorSource(this, 'input')"><?php echo $options; ?></select>
-                        </nowrap>
-                        <br />
-						<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['inputtext'])); ?></textarea>
-					</div>
-					<div>
-						<label for="output-text"><strong>output</strong></label>
-						<button type="button" id="output-to-charcode" onclick="Encoder.toCharCode('output');">toCharCode()</button> 
-						<button type="button" id="output-to-urlencode" onclick="Encoder.toUrlEncode('output');">encodeURIComponent()</button> 
-						<button type="button" id="output-from-charcode" onclick="Encoder.fromCharCode('output');">fromCharCode()</button>
-						<button type="button" id="output-from-urlencode" onclick="Encoder.fromUrlEncode('output');">decodeURIComponent()</button>                          
-                        <nowrap> 
-                            <label>entities:</label>                     
-                            <button type="button" id="input-to-dec-ent" onclick="Encoder.toDecEnt('output');">to DEC</button>
-                            <button type="button" id="input-to-hex-ent" onclick="Encoder.toHexEnt('output');">to HEX</button>
-                            <button type="button" id="input-to-dec-ent" onclick="Encoder.fromDecEnt('output');">from DEC</button>
-                            <button type="button" id="input-to-hex-ent" onclick="Encoder.fromHexEnt('output');">from HEX</button> 						
-                        </nowrap>
-                        <nowrap> 
-                            <label>vectors:</label>
-                            <select onchange="Encoder.fromVectorSource(this, 'output')"><?php echo $options; ?></select>
-						</nowrap>
-                        <br />
-						<textarea name="output-text" id="output-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
-					</div>
+					<button type="button" id="input-to-charcode" onclick="Encoder.toCharCode('input');">toCharCode()</button> 
+					<button type="button" id="input-to-urlencode" onclick="Encoder.toUrlEncode('input');">encodeURIComponent()</button> 
+					<button type="button" id="input-from-charcode" onclick="Encoder.fromCharCode('input');">fromCharCode()</button>
+					<button type="button" id="input-from-urlencode" onclick="Encoder.fromUrlEncode('input');">decodeURIComponent()</button> 
+                    <select>
+                        <optgroup label="Encode">                            
+                            <option onclick="Encoder.toDecEnt('input');">to decimal entities</option>
+                            <option onclick="Encoder.toHexEnt('input');">to HEX entities</option>
+                            <option onclick="Encoder.toSQLHex('input');">to SQL HEX()</option>
+			                <option onclick="Encoder.toSQLChar('input');">to SQL Char()</option>
+                            <option onclick="Encoder.toOctEnt('input');">to octal JS entities</option>
+                        </optgroup>
+		                <optgroup label="Decode">                            
+                            <option onclick="Encoder.fromDecEnt('input');">from decimal entities</option>
+                            <option onclick="Encoder.fromHexEnt('input');">from HEX entities</option>
+                            <option onclick="Encoder.fromSQLHex('input');">from SQL HEX()</option>
+			                <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
+                            <option onclick="Encoder.fromOctEnt('input');">from octal JS entities</option>
+                        </optgroup>
+		                    <optgroup label="Convert">
+                            <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
+                            <option onclick="Encoder.fromEntToBs('input');">from &amp;#NN; to \NN</option>
+                        </optgroup>
+                    </select>                        
+                    <select onchange="Encoder.fromVectorSource(this, 'input')">
+                        <option value="">---</option>
+                        <?php echo $options; ?>
+                    </select>
+                    <br />
+					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
 				</fieldset>
-				<input type="submit" />
+                <fieldset>
+				    <input id="submit" type="submit" value="Convert me!" />
+                </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/" target="_blank">.mario</a> 2007</div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a></div>
+        <div id="selfpromotion">
+            <h3>Other cool stuff</h3>
+            <ul>
+                <li><a href="http://h4k.in/lockr">Lock&#x42f;</a></li>
+                <li><a href="http://h4k.in/encoding">PHP Charset Encoder</a></li>
+                <li><a href="http://h4k.in/characters">PHP Unicode Generator</a></li>
+                <li><a href="http://phpids.heideri.ch/">PHPIDS Smoketest</a></li>
+                <li><a href="http://h4k.in/dataurl">data: URL testcases</a></li>
+            </ul>
+        </div>
 	</body>
 </html>

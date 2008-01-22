@@ -29,18 +29,18 @@ class Encoder_Feed {
      *  @return string exploit options
      */
     public function createHTMLOptions() {
-        
+
         $source = file_get_contents($this->feedUrl);
         $feed = new XML_Feed_Parser($source);            
         
-        $options = string;
+        $options = NULL;
         
         foreach ($feed as $entry) {
-            preg_match('/Exploit String: <\/b>(.*)<br><b>Exploit Tags:/ism', $entry->description, $matches);
+            preg_match('/Exploit String: <\/b>(.*)<br><b>Exploit Description:/ism', $entry->description, $matches);
             $matches[1] = $this->replaceBRTags($matches[1]);
-            $options .= '<option value="'.htmlspecialchars($matches[1]).'">' . $entry->title . '</option>';
+            $options .= '<option value="'.htmlspecialchars($matches[1]).'">' . htmlentities($entry->title) . '</option>';
         } 
-        
+
         return $options;         
     }
 
