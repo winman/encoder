@@ -47,7 +47,7 @@ $Request->response['outputtext'];
 		</div>
 		<div id="info">
 			This tool helps you encoding arbitrary texts to and from various charsets. Also some encoding functions featured by 
-			JavaScript are provided. Feel free to give <a href="mailto:mario.heiderich@gmail.com">feedback</a> if you are missing something or if you found a bug.
+			javascript are provided. Feel free to give <a href="mailto:mario.heiderich@gmail.com">feedback</a> if you are missing something or if you found a bug.
 		</div>
 		<div>
 			<form method="post" action="index.php">

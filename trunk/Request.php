@@ -34,7 +34,7 @@ class Encoder_Request {
             $this->response['inputtext'] = $_POST['input-text'];
             $this->response['outputenc'] = $_POST['output-encoding'];
             $this->response['outputtext'] = mb_convert_encoding(
-                                                    $_POST['input-text'], 
+                                                    stripslashes($_POST['input-text']), 
                                                     $_POST['output-encoding'], 
                                                     $_POST['input-encoding']);
 
