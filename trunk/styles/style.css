@@ -2,7 +2,7 @@ html * {
     padding: 0;
 	border: 0;
 	margin: 0;
-	-moz-border-radius-topleft: 20px;
+	-moz-border-radius: 20px 20px 20px 20px;
 }
 
 html {
@@ -104,6 +104,20 @@ input[type=submit], button, select {
 	border: 2px solid #bd370d; 
 	background: #e3b023;
     margin: 10px 0;
+}
+select[id=encdec]{
+	border: 2px solid #bd370d; 
+	background: #e3b023;
+    margin: 10px 0;
+    width:150px;
+}
+input[type=reset]{
+    color: #bd370d;
+	border: 2px solid #bd370d; 
+	background: #e3b023;
+    margin: 10px 0;
+    width:300px!important;
+    text-align:center;
 }
 
 select {

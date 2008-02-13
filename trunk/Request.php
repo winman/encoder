@@ -33,11 +33,30 @@ class Encoder_Request {
             $this->response['inputenc'] = $_POST['input-encoding'];
             $this->response['inputtext'] = $_POST['input-text'];
             $this->response['outputenc'] = $_POST['output-encoding'];
-            $this->response['outputtext'] = mb_convert_encoding(
-                                                    stripslashes($_POST['input-text']), 
+            
+            if ($this->response['outputenc'] == 'PUNYCODE')
+            {
+				require_once('idna_convert_060/idna_convert.class.php');
+				require_once('idna_convert_060/transcode_wrapper.php');
+				$IDN = new idna_convert();	
+				$this->response['outputtext'] =  $IDN->encode(encode_utf8($this->response['inputtext'], $this->response['inputenc']));
+							
+			}
+			else if($this->response['inputenc'] == 'PUNYCODE')
+			{
+				require_once('idna_convert_060/idna_convert.class.php');
+				require_once('idna_convert_060/transcode_wrapper.php');
+				$IDN = new idna_convert();	
+				$this->response['outputtext'] =  $IDN->decode($this->response['inputtext']);
+			}
+			else
+			{
+				$this->response['outputtext'] = mb_convert_encoding(
+                                                    $_POST['input-text'], 
                                                     $_POST['output-encoding'], 
                                                     $_POST['input-encoding']);
-
+			}
+            
         } else {
 
             $this->response['inputenc'] = 'UTF-8';
