@@ -5,6 +5,10 @@
  *  @author mario
  *  @package Encoder
  *  @license http://www.gnu.org/licenses/lgpl.html LGPL
+ *  @changelog	
+ *  [2008Feb13 by 7lyrix@gmail.com] 
+ * 		- added PunyCode in I/O encoding dropdown
+ *      - added base64 JS  Enc/Dec dropdown;comment base64 in I/O encoding dropdown 'coz it's redundant
  */
             
 
@@ -17,7 +21,9 @@ require 'Request.php';
 # fetch the vectors from the xssDB
 $Feed = new Encoder_Feed;
 $Feed->setFeedUrl(
-    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
+//    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
+'xssdb.rss'
+
     );
 $options = $Feed->createHTMLOptions(); 
 
@@ -93,7 +99,7 @@ $Request->response['outputtext'];
 					    <option value="byte2le"<?php if($Request->response['inputenc'] == 'byte2le'){ echo ' selected="selected"'; } ?>>byte2le</option>
 					    <option value="byte4be"<?php if($Request->response['inputenc'] == 'byte4be'){ echo ' selected="selected"'; } ?>>byte4be</option>
 					    <option value="byte4le"<?php if($Request->response['inputenc'] == 'byte4le'){ echo ' selected="selected"'; } ?>>byte4le</option>
-					    <option value="BASE64"<?php if($Request->response['inputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option>
+					    <!-- <option value="BASE64"<?php if($Request->response['inputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option> -->
 					    <option value="HTML-ENTITIES"<?php if($Request->response['inputenc'] == 'HTML-ENTITIES'){ echo ' selected="selected"'; } ?>>HTML-ENTITIES</option>
 					    <option value="7bit"<?php if($Request->response['inputenc'] == '7bit'){ echo ' selected="selected"'; } ?>>7bit</option>
 					    <option value="8bit"<?php if($Request->response['inputenc'] == '8bit'){ echo ' selected="selected"'; } ?>>8bit</option>
@@ -110,6 +116,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['inputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['inputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['inputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
+					    <option value="PUNYCODE"<?php if($Request->response['inputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 					<label for="output-encoding">output encoding</label>
 					<select name="output-encoding" id="output-encoding">
@@ -152,7 +159,7 @@ $Request->response['outputtext'];
 					    <option value="byte2le"<?php if($Request->response['outputenc'] == 'byte2le'){ echo ' selected="selected"'; } ?>>byte2le</option>
 					    <option value="byte4be"<?php if($Request->response['outputenc'] == 'byte4be'){ echo ' selected="selected"'; } ?>>byte4be</option>
 					    <option value="byte4le"<?php if($Request->response['outputenc'] == 'byte4le'){ echo ' selected="selected"'; } ?>>byte4le</option>
-					    <option value="BASE64"<?php if($Request->response['outputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option>
+					    <!--<option value="BASE64"<?php if($Request->response['outputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option>-->
 					    <option value="HTML-ENTITIES"<?php if($Request->response['outputenc'] == 'HTML-ENTITIES'){ echo ' selected="selected"'; } ?>>HTML-ENTITIES</option>
 					    <option value="7bit"<?php if($Request->response['outputenc'] == '7bit'){ echo ' selected="selected"'; } ?>>7bit</option>
 					    <option value="8bit"<?php if($Request->response['outputenc'] == '8bit'){ echo ' selected="selected"'; } ?>>8bit</option>
@@ -169,6 +176,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['outputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['outputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['outputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
+					    <option value="PUNYCODE"<?php if($Request->response['outputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 				</fieldset>
 				<fieldset>
@@ -176,13 +184,15 @@ $Request->response['outputtext'];
 					<button type="button" id="input-to-urlencode" onclick="Encoder.toUrlEncode('input');">encodeURIComponent()</button> 
 					<button type="button" id="input-from-charcode" onclick="Encoder.fromCharCode('input');">fromCharCode()</button>
 					<button type="button" id="input-from-urlencode" onclick="Encoder.fromUrlEncode('input');">decodeURIComponent()</button> 
-                    <select>
+                    <select id="encdec" onblur="setTimeout('document.getElementById(\'encdec\').selectedIndex=0',5000)">
+                    	<option>--Encoder/Decoder--</option>
                         <optgroup label="Encode">                            
                             <option onclick="Encoder.toDecEnt('input');">to decimal entities</option>
                             <option onclick="Encoder.toHexEnt('input');">to HEX entities</option>
                             <option onclick="Encoder.toSQLHex('input');">to SQL HEX()</option>
 			                <option onclick="Encoder.toSQLChar('input');">to SQL Char()</option>
                             <option onclick="Encoder.toOctEnt('input');">to octal JS entities</option>
+                            <option onclick="Encoder.toBase64('input');">to Base64</option>
                         </optgroup>
 		                <optgroup label="Decode">                            
                             <option onclick="Encoder.fromDecEnt('input');">from decimal entities</option>
@@ -190,6 +200,7 @@ $Request->response['outputtext'];
                             <option onclick="Encoder.fromSQLHex('input');">from SQL HEX()</option>
 			                <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
                             <option onclick="Encoder.fromOctEnt('input');">from octal JS entities</option>
+                            <option onclick="Encoder.fromBase64('input');">from Base64</option>                  
                         </optgroup>
 		                    <optgroup label="Convert">
                             <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
@@ -197,14 +208,14 @@ $Request->response['outputtext'];
                         </optgroup>
                     </select>                        
                     <select onchange="Encoder.fromVectorSource(this, 'input')">
-                        <option value="">---</option>
+                        <option value="">--XSS Payloads--</option>
                         <?php echo $options; ?>
                     </select>
                     <br />
 					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
 				</fieldset>
                 <fieldset>
-				    <input id="submit" type="submit" value="Convert me!" />
+				    <input id="submit" type="submit" value="Convert me!" /> <input id="reset" type="reset" value="Clear All" />
                 </fieldset>
 			</form>
 		</div>
