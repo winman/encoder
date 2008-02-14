@@ -21,10 +21,8 @@ require 'Request.php';
 # fetch the vectors from the xssDB
 $Feed = new Encoder_Feed;
 $Feed->setFeedUrl(
-//    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
-'xssdb.rss'
-
-    );
+    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
+);
 $options = $Feed->createHTMLOptions(); 
 
 # handle incoming requests
@@ -116,7 +114,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['inputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['inputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['inputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="PUNYCODE"<?php if($Request->response['inputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
+					    <option value="Punycode"<?php if($Request->response['inputenc'] == 'Punycode'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 					<label for="output-encoding">output encoding</label>
 					<select name="output-encoding" id="output-encoding">
@@ -176,7 +174,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['outputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['outputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['outputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="PUNYCODE"<?php if($Request->response['outputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
+					    <option value="Punycode"<?php if($Request->response['outputenc'] == 'Punycode'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 				</fieldset>
 				<fieldset>
@@ -219,7 +217,7 @@ $Request->response['outputtext'];
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a></div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - thanks for helping with several features go to <a href="http://yehg.co.nr">d0ubl3_h3lix</a> - this markup is <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a></div>
         <div id="selfpromotion">
             <h3>Other cool stuff</h3>
             <ul>
