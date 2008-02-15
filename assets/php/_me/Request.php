@@ -34,18 +34,20 @@ class Encoder_Request {
             $this->response['inputtext'] = stripslashes($_POST['input-text']);
             $this->response['outputenc'] = $_POST['output-encoding'];
             
-            if ($this->response['outputenc'] == 'Punycode')
+            if ($this->response['outputenc'] == 'PUNYCODE')
             {
-				require_once('idna_convert_060/idna_convert.class.php');
-				require_once('idna_convert_060/transcode_wrapper.php');
+				require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+				require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
+			
 				$IDN = new idna_convert();	
 				$this->response['outputtext'] =  $IDN->encode(encode_utf8($this->response['inputtext'], $this->response['inputenc']));
 							
 			}
-			else if($this->response['inputenc'] == 'Punycode')
+			else if($this->response['inputenc'] == 'PUNYCODE')
 			{
-				require_once('idna_convert_060/idna_convert.class.php');
-				require_once('idna_convert_060/transcode_wrapper.php');
+				require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+				require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
+			
 				$IDN = new idna_convert();	
 				$this->response['outputtext'] =  $IDN->decode($this->response['inputtext']);
 			}

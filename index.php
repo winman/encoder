@@ -6,7 +6,12 @@
  *  @package Encoder
  *  @license http://www.gnu.org/licenses/lgpl.html LGPL
  *  @changelog	
- *  [2008Feb13 by 7lyrix@gmail.com] 
+ *  [2008Feb15 by d0ubl3_h3lix@yehg.co.nr] 
+ * 		- Integrated DeanEdwards' Packer as Base62,Minify in Enc/Dec dropdown 
+ *      - Hexcoded your email to hide from spammers :)
+ *      - Re-arrange folder structures for well organizations:js,css,php according to your sugguestions
+ *      - Fixed CSS 'px' to '%' to be viewed by all lower screen resolutions monitors   
+ *  [2008Feb13 by d0ubl3_h3lix@yehg.co.nr] 
  * 		- added PunyCode in I/O encoding dropdown
  *      - added base64 JS  Enc/Dec dropdown;comment base64 in I/O encoding dropdown 'coz it's redundant
  */
@@ -14,15 +19,16 @@
 
 # include needed files
 require 'XML/Feed/Parser.php';
-require 'Feed.php';
-require 'Request.php';
+require 'assets/php/_me/Feed.php';
+require 'assets/php/_me/Request.php';
 
 
 # fetch the vectors from the xssDB
 $Feed = new Encoder_Feed;
+$FeedURL = (eregi($_SERVER["HTTP_HOST"],"localhost"))?'assets/misc/xssdb.rss':'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss';
 $Feed->setFeedUrl(
-    'http://xssdb.dabbledb.com/publish/attackdb/dc23ad51-25ef-4fdc-92be-4a7cb606387e/xssdb.rss'
-);
+		$FeedURL
+    );
 $options = $Feed->createHTMLOptions(); 
 
 # handle incoming requests
@@ -42,8 +48,14 @@ $Request->response['outputtext'];
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>PHP Charset Encoder</title>
-		<link rel="Stylesheet" type="text/css" href="styles/style.css" />
-		<script type="text/javascript" src="scripts/encode.js"></script>
+		<link rel="Stylesheet" type="text/css" href="assets/css/style.css" />		
+		 <script type="text/javascript" src="assets/js/deanedwards/my.js"></script>
+		 <meta name="description" content="A Javascript compressor.">
+		 <meta name="keywords" content="packer,javascript,compressor,obfuscator">
+		 <script src="assets/js/deanedwards/base2-load.js" type="text/javascript"></script>
+		 <script src="assets/js/deanedwards/Packer.js" type="text/javascript"></script>
+		 <script src="assets/js/deanedwards/Words.js" type="text/javascript"></script>
+		<script type="text/javascript" src="assets/js/_me/encode.js"></script> 		
 	</head>
 	<body>
 		<div>
@@ -51,7 +63,7 @@ $Request->response['outputtext'];
 		</div>
 		<div id="info">
 			This tool helps you encoding arbitrary texts to and from various charsets. Also some encoding functions featured by 
-			javascript are provided. Feel free to give <a href="mailto:mario.heiderich@gmail.com">feedback</a> if you are missing something or if you found a bug.
+			javascript are provided. Feel free to give <a href="mailto:&#109;&#97;&#114;&#105;&#111;&#46;&#104;&#101;&#105;&#100;&#101;&#114;&#105;&#99;&#104;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">feedback</a> if you are missing something or if you found a bug.
 		</div>
 		<div>
 			<form method="post" action="index.php">
@@ -114,7 +126,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['inputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['inputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['inputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="Punycode"<?php if($Request->response['inputenc'] == 'Punycode'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
+					    <option value="PUNYCODE"<?php if($Request->response['inputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 					<label for="output-encoding">output encoding</label>
 					<select name="output-encoding" id="output-encoding">
@@ -174,7 +186,7 @@ $Request->response['outputtext'];
 					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['outputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
 					    <option value="CP866 (IBM866)"<?php if($Request->response['outputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
 					    <option value="KOI8-R"<?php if($Request->response['outputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="Punycode"<?php if($Request->response['outputenc'] == 'Punycode'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
+					    <option value="PUNYCODE"<?php if($Request->response['outputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
 					</select>
 				</fieldset>
 				<fieldset>
@@ -191,6 +203,7 @@ $Request->response['outputtext'];
 			                <option onclick="Encoder.toSQLChar('input');">to SQL Char()</option>
                             <option onclick="Encoder.toOctEnt('input');">to octal JS entities</option>
                             <option onclick="Encoder.toBase64('input');">to Base64</option>
+                            <option onclick="Encoder.toBase62('input');">to Base62</option>
                         </optgroup>
 		                <optgroup label="Decode">                            
                             <option onclick="Encoder.fromDecEnt('input');">from decimal entities</option>
@@ -198,15 +211,20 @@ $Request->response['outputtext'];
                             <option onclick="Encoder.fromSQLHex('input');">from SQL HEX()</option>
 			                <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
                             <option onclick="Encoder.fromOctEnt('input');">from octal JS entities</option>
-                            <option onclick="Encoder.fromBase64('input');">from Base64</option>                  
+                            <option onclick="Encoder.fromBase64('input');">from Base64</option>
+							<option onclick="Encoder.fromBase62('input');">from Base62</option>                  
                         </optgroup>
 		                    <optgroup label="Convert">
                             <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
                             <option onclick="Encoder.fromEntToBs('input');">from &amp;#NN; to \NN</option>
                         </optgroup>
+                        </optgroup>
+		                    <optgroup label="Misc">
+                            <option onclick="Encoder.Minify('input');">Minify</option>                            
+                        </optgroup>
                     </select>                        
                     <select onchange="Encoder.fromVectorSource(this, 'input')">
-                        <option value="">--XSS Payloads--</option>
+                        <option value="">-----------------Updated XSS Payloads---------------------</option>
                         <?php echo $options; ?>
                     </select>
                     <br />
@@ -217,7 +235,7 @@ $Request->response['outputtext'];
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - thanks for helping with several features go to <a href="http://yehg.co.nr">d0ubl3_h3lix</a> - this markup is <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a></div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.co.nr" target="_blank">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/02/15</div>
         <div id="selfpromotion">
             <h3>Other cool stuff</h3>
             <ul>

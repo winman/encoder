@@ -73,7 +73,7 @@ Encoder.toOctEnt = function (field){
 }
 
 /***** [BASE64 ROUTINE] *****/
-
+// Credits: RSnake http://ha.ckers.org/xss.html
 var base64Chars = new Array(
     'A','B','C','D','E','F','G','H',
     'I','J','K','L','M','N','O','P',
@@ -190,6 +190,37 @@ Encoder.fromBase64 = function (field){
 
 /***** [/BASE64 ROUTINE] *****/
 
+/***** [BASE62 ROUTINE] *****/
+// Credits: Dean Edwards http://deanedwards.name/packer
+Encoder.toBase62 = function (field){
+	var x = confirm("Dean Edwards' base62 packing will cause your payload to fail\nbecause it removes all comments, whitespaces,carriage returns\nthat you might have used to bypass filters.\n\nAnyway, continue?");
+	if(x)
+	{
+		var packer = new Packer;
+	    var text = document.getElementById(field + '-text').value;
+		var result = packer.pack(text, true, false);
+		document.getElementById(field + '-text').value = result;
+	}
+    return false;
+}
+Encoder.fromBase62 = function (field){
+    var text = document.getElementById(field + '-text').value;
+    eval("var Base62Value=String" + text.slice(4));
+	document.getElementById(field + '-text').value = Base62Value;
+    return false;
+}
+Encoder.Minify = function (field){
+	var x = confirm("Minizing or compressing will cause your payload to fail\nbecause it removes all comments, whitespaces,carriage returns\nthat you might have used to bypass filters.\n\nAnyway, continue?");
+	if(x)
+	{
+		var packer = new Packer;
+	    var text = document.getElementById(field + '-text').value;
+		var result = packer.pack(text, false, false);
+		document.getElementById(field + '-text').value = result;	
+	}	
+    return false;
+}
+/***** [/BASE62 ROUTINE] *****/
 Encoder.fromHexEnt = function (field){
     var text = document.getElementById(field + '-text').value;
     var array = text.split(';');
