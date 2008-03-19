@@ -153,10 +153,7 @@ array_push($encoding_list,'PUNYCODE');
                         <?php echo $options; ?>
                     </select>
                     <br />
-					<textarea name="input-text" id="input-text" cols="75" rows="6">
-                        <?php echo isset($_GET['hv'])?htmlspecialchars(rawurldecode($_GET['hv']), ENT_QUOTES, 'UTF-8'):'';?>
-                        <?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?>
-                    </textarea>
+					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo isset($_GET['hv'])?htmlspecialchars(rawurldecode($_GET['hv']), ENT_QUOTES, 'UTF-8'):'';?><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
 				</fieldset>
                 <fieldset>
 				    <input id="submit" type="submit" value="Convert me!" /> &nbsp;&nbsp;<input id="h4kvertor" type="button" onclick="Encoder.Send2HV('input');" value="Send to HackVertor API" /> &nbsp;&nbsp;<input id="reset" type="reset" value="Clear All" />
