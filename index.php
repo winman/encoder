@@ -6,12 +6,24 @@
  *  @package Encoder
  *  @license http://www.gnu.org/licenses/lgpl.html LGPL
  *  @changelog	
- *  [2008Feb15 by d0ubl3_h3lix@yehg.co.nr] 
+ * 
+ *  [2008-03-19 by .mario]
+ *      - Added GET interface for the Hackvertor
+ * 
+ *  [2008-03-14 by d0ubl3_h3lix@yehg.co.nr]
+ *      - Major change in I/O encoding list
+ *      - I/O encoding list dynamically grapped from native mb_list_encodings array
+ *      - PHP Version 5.2.5 supports 64 kinds of to-and-from encoding; Prior PCE supported 53
+ *      - Added HackVertor Button
+ *      - Added from %0a to %0d%a function	
+ * 
+ *  [2008-02-15 by d0ubl3_h3lix@yehg.co.nr] 
  * 		- Integrated DeanEdwards' Packer as Base62,Minify in Enc/Dec dropdown 
  *      - Hexcoded your email to hide from spammers :)
  *      - Re-arrange folder structures for well organizations:js,css,php according to your sugguestions
- *      - Fixed CSS 'px' to '%' to be viewed by all lower screen resolutions monitors   
- *  [2008Feb13 by d0ubl3_h3lix@yehg.co.nr] 
+ *      - Fixed CSS 'px' to '%' to be viewed by all lower screen resolutions monitors
+ *    
+ *  [2008-02-13 by d0ubl3_h3lix@yehg.co.nr] 
  * 		- added PunyCode in I/O encoding dropdown
  *      - added base64 JS  Enc/Dec dropdown;comment base64 in I/O encoding dropdown 'coz it's redundant
  */
@@ -39,7 +51,8 @@ $Request->response['inputtext'];
 $Request->response['outputenc'];
 $Request->response['outputtext'];
 
-
+$encoding_list =mb_list_encodings();
+array_push($encoding_list,'PUNYCODE');
 #generate the HTML
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -47,147 +60,59 @@ $Request->response['outputtext'];
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="keywords" content="packer,javascript,compressor,obfuscator" />
 		<title>PHP Charset Encoder</title>
-		<link rel="Stylesheet" type="text/css" href="assets/css/style.css" />		
-		 <script type="text/javascript" src="assets/js/deanedwards/my.js"></script>
-		 <meta name="description" content="A Javascript compressor.">
-		 <meta name="keywords" content="packer,javascript,compressor,obfuscator">
-		 <script src="assets/js/deanedwards/base2-load.js" type="text/javascript"></script>
-		 <script src="assets/js/deanedwards/Packer.js" type="text/javascript"></script>
-		 <script src="assets/js/deanedwards/Words.js" type="text/javascript"></script>
-		<script type="text/javascript" src="assets/js/_me/encode.js"></script> 		
+		
+        <link rel="Stylesheet" type="text/css" href="/encoding/assets/css/style.css" />		
+		<script type="text/javascript" src="/encoding/assets/js/deanedwards/my.js"></script>
+		<script src="/encoding/assets/js/deanedwards/base2-load.js" type="text/javascript"></script>
+		<script src="/encoding/assets/js/deanedwards/Packer.js" type="text/javascript"></script>
+		<script src="/encoding/assets/js/deanedwards/Words.js" type="text/javascript"></script>
+		<script src="/encoding/assets/js/_me/encode.js" type="text/javascript"></script> 		
 	</head>
 	<body>
 		<div>
-			<h1><span class="red">PHP</span> <span class="small">Charset Encoder</span></h1>
+			<h1><span class="red">PHP</span><span class="small">Charset Encoder</span></h1>
 		</div>
 		<div id="info">
-			This tool helps you encoding arbitrary texts to and from various charsets. Also some encoding functions featured by 
-			javascript are provided. Feel free to give <a href="mailto:&#109;&#97;&#114;&#105;&#111;&#46;&#104;&#101;&#105;&#100;&#101;&#114;&#105;&#99;&#104;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">feedback</a> if you are missing something or if you found a bug.
+			This tool helps you encoding arbitrary texts to and from <span class="underline"> <?=count($encoding_list)?> kinds</span> of charsets. Also some encoding functions featured by 
+			JavaScript are provided. The tool accepts rawurlencoded input via the GET parameter <strong>hv</strong>. Feel free to give <a href="mailto:&#109;&#97;&#114;&#105;&#111;&#46;&#104;&#101;&#105;&#100;&#101;&#114;&#105;&#99;&#104;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">feedback</a> if you are missing something or if you found a bug.
 		</div>
 		<div>
 			<form method="post" action="index.php">
 				<fieldset>
 					<label for="input-encoding">input encoding</label>
 					<select name="input-encoding" id="input-encoding">
-						<option value="UCS-4"<?php if($Request->response['inputenc'] == 'UCS-4'){ echo ' selected="selected"'; } ?>>UCS-4</option>
-					    <option value="UCS-4BE"<?php if($Request->response['inputenc'] == 'UCS-4BE'){ echo ' selected="selected"'; } ?>>UCS-4BE</option>
-					    <option value="UCS-4LE"<?php if($Request->response['inputenc'] == 'UCS-4LE'){ echo ' selected="selected"'; } ?>>UCS-4LE</option>
-					    <option value="UCS-2"<?php if($Request->response['inputenc'] == 'UCS-2'){ echo ' selected="selected"'; } ?>>UCS-2</option>
-					    <option value="UCS-2BE"<?php if($Request->response['inputenc'] == 'UCS-2BE'){ echo ' selected="selected"'; } ?>>UCS-2BE</option>
-					    <option value="UCS-2LE"<?php if($Request->response['inputenc'] == 'UCS-2LE'){ echo ' selected="selected"'; } ?>>UCS-2LE</option>
-					    <option value="UTF-32"<?php if($Request->response['inputenc'] == 'UTF-32'){ echo ' selected="selected"'; } ?>>UTF-32</option>
-					    <option value="UTF-32BE"<?php if($Request->response['inputenc'] == 'UTF-32BE'){ echo ' selected="selected"'; } ?>>UTF-32BE</option>
-					    <option value="UTF-32LE"<?php if($Request->response['inputenc'] == 'UTF-32LE'){ echo ' selected="selected"'; } ?>>UTF-32LE</option>
-					    <option value="UTF-16"<?php if($Request->response['inputenc'] == 'UTF-16'){ echo ' selected="selected"'; } ?>>UTF-16</option>
-					    <option value="UTF-16BE"<?php if($Request->response['inputenc'] == 'UTF-16BE'){ echo ' selected="selected"'; } ?>>UTF-16BE</option>
-					    <option value="UTF-16LE"<?php if($Request->response['inputenc'] == 'UTF-16LE'){ echo ' selected="selected"'; } ?>>UTF-16LE</option>
-					    <option value="UTF-7"<?php if($Request->response['inputenc'] == 'UTF-7'){ echo ' selected="selected"'; } ?>>UTF-7</option>
-					    <option value="UTF7-IMAP"<?php if($Request->response['inputenc'] == 'UTF7-IMAP'){ echo ' selected="selected"'; } ?>>UTF7-IMAP</option>
-					    <option value="UTF-8"<?php if($Request->response['inputenc'] == 'UTF-8'){ echo ' selected="selected"'; } ?>>UTF-8</option>
-					    <option value="ASCII"<?php if($Request->response['inputenc'] == 'ASCII'){ echo ' selected="selected"'; } ?>>ASCII</option>
-					    <option value="EUC-JP"<?php if($Request->response['inputenc'] == 'EUC-JP'){ echo ' selected="selected"'; } ?>>EUC-JP</option>
-					    <option value="SJIS"<?php if($Request->response['inputenc'] == 'SJIS'){ echo ' selected="selected"'; } ?>>SJIS</option>
-					    <option value="eucJP-win"<?php if($Request->response['inputenc'] == 'eucJP-win'){ echo ' selected="selected"'; } ?>>eucJP-win</option>
-					    <option value="SJIS-win"<?php if($Request->response['inputenc'] == 'SJIS-win'){ echo ' selected="selected"'; } ?>>SJIS-win</option>
-					    <option value="ISO-2022-JP"<?php if($Request->response['inputenc'] == 'ISO-2022-JP'){ echo ' selected="selected"'; } ?>>ISO-2022-JP</option>
-					    <option value="JIS"<?php if($Request->response['inputenc'] == 'JIS'){ echo ' selected="selected"'; } ?>>JIS</option>
-					    <option value="ISO-8859-1"<?php if($Request->response['inputenc'] == 'ISO-8859-1'){ echo ' selected="selected"'; } ?>>ISO-8859-1</option>
-					    <option value="ISO-8859-2"<?php if($Request->response['inputenc'] == 'ISO-8859-2'){ echo ' selected="selected"'; } ?>>ISO-8859-2</option>
-					    <option value="ISO-8859-3"<?php if($Request->response['inputenc'] == 'ISO-8859-3'){ echo ' selected="selected"'; } ?>>ISO-8859-3</option>
-					    <option value="ISO-8859-4"<?php if($Request->response['inputenc'] == 'ISO-8859-4'){ echo ' selected="selected"'; } ?>>ISO-8859-4</option>
-					    <option value="ISO-8859-5"<?php if($Request->response['inputenc'] == 'ISO-8859-5'){ echo ' selected="selected"'; } ?>>ISO-8859-5</option>
-					    <option value="ISO-8859-6"<?php if($Request->response['inputenc'] == 'ISO-8859-6'){ echo ' selected="selected"'; } ?>>ISO-8859-6</option>
-					    <option value="ISO-8859-7"<?php if($Request->response['inputenc'] == 'ISO-8859-7'){ echo ' selected="selected"'; } ?>>ISO-8859-7</option>
-					    <option value="ISO-8859-8"<?php if($Request->response['inputenc'] == 'ISO-8859-8'){ echo ' selected="selected"'; } ?>>ISO-8859-8</option>
-					    <option value="ISO-8859-9"<?php if($Request->response['inputenc'] == 'ISO-8859-9'){ echo ' selected="selected"'; } ?>>ISO-8859-9</option>
-					    <option value="ISO-8859-10"<?php if($Request->response['inputenc'] == 'ISO-8859-10'){ echo ' selected="selected"'; } ?>>ISO-8859-10</option>
-					    <option value="ISO-8859-13"<?php if($Request->response['inputenc'] == 'ISO-8859-13'){ echo ' selected="selected"'; } ?>>ISO-8859-13</option>
-					    <option value="ISO-8859-14"<?php if($Request->response['inputenc'] == 'ISO-8859-14'){ echo ' selected="selected"'; } ?>>ISO-8859-14</option>
-					    <option value="ISO-8859-15"<?php if($Request->response['inputenc'] == 'ISO-8859-15'){ echo ' selected="selected"'; } ?>>ISO-8859-15</option>
-					    <option value="byte2be"<?php if($Request->response['inputenc'] == 'byte2be'){ echo ' selected="selected"'; } ?>>byte2be</option>
-					    <option value="byte2le"<?php if($Request->response['inputenc'] == 'byte2le'){ echo ' selected="selected"'; } ?>>byte2le</option>
-					    <option value="byte4be"<?php if($Request->response['inputenc'] == 'byte4be'){ echo ' selected="selected"'; } ?>>byte4be</option>
-					    <option value="byte4le"<?php if($Request->response['inputenc'] == 'byte4le'){ echo ' selected="selected"'; } ?>>byte4le</option>
-					    <!-- <option value="BASE64"<?php if($Request->response['inputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option> -->
-					    <option value="HTML-ENTITIES"<?php if($Request->response['inputenc'] == 'HTML-ENTITIES'){ echo ' selected="selected"'; } ?>>HTML-ENTITIES</option>
-					    <option value="7bit"<?php if($Request->response['inputenc'] == '7bit'){ echo ' selected="selected"'; } ?>>7bit</option>
-					    <option value="8bit"<?php if($Request->response['inputenc'] == '8bit'){ echo ' selected="selected"'; } ?>>8bit</option>
-					    <option value="EUC-CN"<?php if($Request->response['inputenc'] == 'EUC-CN'){ echo ' selected="selected"'; } ?>>EUC-CN</option>
-					    <option value="CP936"<?php if($Request->response['inputenc'] == 'CP936'){ echo ' selected="selected"'; } ?>>CP936</option>
-					    <option value="HZ"<?php if($Request->response['inputenc'] == 'HZ'){ echo ' selected="selected"'; } ?>>HZ</option>
-					    <option value="EUC-TW"<?php if($Request->response['inputenc'] == 'EUC-TW'){ echo ' selected="selected"'; } ?>>EUC-TW</option>
-					    <option value="CP950"<?php if($Request->response['inputenc'] == 'CP950'){ echo ' selected="selected"'; } ?>>CP950</option>
-					    <option value="BIG-5"<?php if($Request->response['inputenc'] == 'BIG-5'){ echo ' selected="selected"'; } ?>>BIG-5</option>
-					    <option value="EUC-KR"<?php if($Request->response['inputenc'] == 'EUC-KR'){ echo ' selected="selected"'; } ?>>EUC-KR</option>
-					    <option value="UHC (CP949)"<?php if($Request->response['inputenc'] == 'UHC (CP949)'){ echo ' selected="selected"'; } ?>>UHC (CP949)</option>
-					    <option value="ISO-2022-KR"<?php if($Request->response['inputenc'] == 'ISO-2022-KR'){ echo ' selected="selected"'; } ?>>ISO-2022-KR</option>
-					    <option value="Windows-1251 (CP1251)"<?php if($Request->response['inputenc'] == 'Windows-1251 (CP1251)'){ echo ' selected="selected"'; } ?>>Windows-1251 (CP1251)</option>
-					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['inputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
-					    <option value="CP866 (IBM866)"<?php if($Request->response['inputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
-					    <option value="KOI8-R"<?php if($Request->response['inputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="PUNYCODE"<?php if($Request->response['inputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
+					<?
+					$selected_input = $Request->response['inputenc'];					
+
+
+					for($i=0;$i<=count($encoding_list)-1;$i++)
+					{
+						$is_input_selected = '';
+						if ($Request->response['inputenc']==$encoding_list[$i])
+						{
+							$is_input_selected=' selected="selected"';
+						}
+						echo '<option value="'.$encoding_list[$i].'"'. $is_input_selected.'>'.$encoding_list[$i].'</option>'."\n";
+					}					
+					
+					?>	
 					</select>
 					<label for="output-encoding">output encoding</label>
 					<select name="output-encoding" id="output-encoding">
-						<option value="UCS-4"<?php if($Request->response['outputenc'] == 'UCS-4'){ echo ' selected="selected"'; } ?>>UCS-4</option>
-					    <option value="UCS-4BE"<?php if($Request->response['outputenc'] == 'UCS-4BE'){ echo ' selected="selected"'; } ?>>UCS-4BE</option>
-					    <option value="UCS-4LE"<?php if($Request->response['outputenc'] == 'UCS-4LE'){ echo ' selected="selected"'; } ?>>UCS-4LE</option>
-					    <option value="UCS-2"<?php if($Request->response['outputenc'] == 'UCS-2'){ echo ' selected="selected"'; } ?>>UCS-2</option>
-					    <option value="UCS-2BE"<?php if($Request->response['outputenc'] == 'UCS-2BE'){ echo ' selected="selected"'; } ?>>UCS-2BE</option>
-					    <option value="UCS-2LE"<?php if($Request->response['outputenc'] == 'UCS-2LE'){ echo ' selected="selected"'; } ?>>UCS-2LE</option>
-					    <option value="UTF-32"<?php if($Request->response['outputenc'] == 'UTF-32'){ echo ' selected="selected"'; } ?>>UTF-32</option>
-					    <option value="UTF-32BE"<?php if($Request->response['outputenc'] == 'UTF-32BE'){ echo ' selected="selected"'; } ?>>UTF-32BE</option>
-					    <option value="UTF-32LE"<?php if($Request->response['outputenc'] == 'UTF-32LE'){ echo ' selected="selected"'; } ?>>UTF-32LE</option>
-					    <option value="UTF-16"<?php if($Request->response['outputenc'] == 'UTF-16'){ echo ' selected="selected"'; } ?>>UTF-16</option>
-					    <option value="UTF-16BE"<?php if($Request->response['outputenc'] == 'UTF-16BE'){ echo ' selected="selected"'; } ?>>UTF-16BE</option>
-					    <option value="UTF-16LE"<?php if($Request->response['outputenc'] == 'UTF-16LE'){ echo ' selected="selected"'; } ?>>UTF-16LE</option>
-					    <option value="UTF-7"<?php if($Request->response['outputenc'] == 'UTF-7'){ echo ' selected="selected"'; } ?>>UTF-7</option>
-					    <option value="UTF7-IMAP"<?php if($Request->response['outputenc'] == 'UTF7-IMAP'){ echo ' selected="selected"'; } ?>>UTF7-IMAP</option>
-					    <option value="UTF-8"<?php if($Request->response['outputenc'] == 'UTF-8'){ echo ' selected="selected"'; } ?>>UTF-8</option>
-					    <option value="ASCII"<?php if($Request->response['outputenc'] == 'ASCII'){ echo ' selected="selected"'; } ?>>ASCII</option>
-					    <option value="EUC-JP"<?php if($Request->response['outputenc'] == 'EUC-JP'){ echo ' selected="selected"'; } ?>>EUC-JP</option>
-					    <option value="SJIS"<?php if($Request->response['outputenc'] == 'SJIS'){ echo ' selected="selected"'; } ?>>SJIS</option>
-					    <option value="eucJP-win"<?php if($Request->response['outputenc'] == 'eucJP-win'){ echo ' selected="selected"'; } ?>>eucJP-win</option>
-					    <option value="SJIS-win"<?php if($Request->response['outputenc'] == 'SJIS-win'){ echo ' selected="selected"'; } ?>>SJIS-win</option>
-					    <option value="ISO-2022-JP"<?php if($Request->response['outputenc'] == 'ISO-2022-JP'){ echo ' selected="selected"'; } ?>>ISO-2022-JP</option>
-					    <option value="JIS"<?php if($Request->response['outputenc'] == 'JIS'){ echo ' selected="selected"'; } ?>>JIS</option>
-					    <option value="ISO-8859-1"<?php if($Request->response['outputenc'] == 'ISO-8859-1'){ echo ' selected="selected"'; } ?>>ISO-8859-1</option>
-					    <option value="ISO-8859-2"<?php if($Request->response['outputenc'] == 'ISO-8859-2'){ echo ' selected="selected"'; } ?>>ISO-8859-2</option>
-					    <option value="ISO-8859-3"<?php if($Request->response['outputenc'] == 'ISO-8859-3'){ echo ' selected="selected"'; } ?>>ISO-8859-3</option>
-					    <option value="ISO-8859-4"<?php if($Request->response['outputenc'] == 'ISO-8859-4'){ echo ' selected="selected"'; } ?>>ISO-8859-4</option>
-					    <option value="ISO-8859-5"<?php if($Request->response['outputenc'] == 'ISO-8859-5'){ echo ' selected="selected"'; } ?>>ISO-8859-5</option>
-					    <option value="ISO-8859-6"<?php if($Request->response['outputenc'] == 'ISO-8859-6'){ echo ' selected="selected"'; } ?>>ISO-8859-6</option>
-					    <option value="ISO-8859-7"<?php if($Request->response['outputenc'] == 'ISO-8859-7'){ echo ' selected="selected"'; } ?>>ISO-8859-7</option>
-					    <option value="ISO-8859-8"<?php if($Request->response['outputenc'] == 'ISO-8859-8'){ echo ' selected="selected"'; } ?>>ISO-8859-8</option>
-					    <option value="ISO-8859-9"<?php if($Request->response['outputenc'] == 'ISO-8859-9'){ echo ' selected="selected"'; } ?>>ISO-8859-9</option>
-					    <option value="ISO-8859-10"<?php if($Request->response['outputenc'] == 'ISO-8859-10'){ echo ' selected="selected"'; } ?>>ISO-8859-10</option>
-					    <option value="ISO-8859-13"<?php if($Request->response['outputenc'] == 'ISO-8859-13'){ echo ' selected="selected"'; } ?>>ISO-8859-13</option>
-					    <option value="ISO-8859-14"<?php if($Request->response['outputenc'] == 'ISO-8859-14'){ echo ' selected="selected"'; } ?>>ISO-8859-14</option>
-					    <option value="ISO-8859-15"<?php if($Request->response['outputenc'] == 'ISO-8859-15'){ echo ' selected="selected"'; } ?>>ISO-8859-15</option>
-					    <option value="byte2be"<?php if($Request->response['outputenc'] == 'byte2be'){ echo ' selected="selected"'; } ?>>byte2be</option>
-					    <option value="byte2le"<?php if($Request->response['outputenc'] == 'byte2le'){ echo ' selected="selected"'; } ?>>byte2le</option>
-					    <option value="byte4be"<?php if($Request->response['outputenc'] == 'byte4be'){ echo ' selected="selected"'; } ?>>byte4be</option>
-					    <option value="byte4le"<?php if($Request->response['outputenc'] == 'byte4le'){ echo ' selected="selected"'; } ?>>byte4le</option>
-					    <!--<option value="BASE64"<?php if($Request->response['outputenc'] == 'BASE64'){ echo ' selected="selected"'; } ?>>BASE64</option>-->
-					    <option value="HTML-ENTITIES"<?php if($Request->response['outputenc'] == 'HTML-ENTITIES'){ echo ' selected="selected"'; } ?>>HTML-ENTITIES</option>
-					    <option value="7bit"<?php if($Request->response['outputenc'] == '7bit'){ echo ' selected="selected"'; } ?>>7bit</option>
-					    <option value="8bit"<?php if($Request->response['outputenc'] == '8bit'){ echo ' selected="selected"'; } ?>>8bit</option>
-					    <option value="EUC-CN"<?php if($Request->response['outputenc'] == 'EUC-CN'){ echo ' selected="selected"'; } ?>>EUC-CN</option>
-					    <option value="CP936"<?php if($Request->response['outputenc'] == 'CP936'){ echo ' selected="selected"'; } ?>>CP936</option>
-						<option value="HZ"<?php if($Request->response['outputenc'] == 'HZ'){ echo ' selected="selected"'; } ?>>HZ</option>
-					    <option value="EUC-TW"<?php if($Request->response['outputenc'] == 'EUC-TW'){ echo ' selected="selected"'; } ?>>EUC-TW</option>
-					    <option value="CP950"<?php if($Request->response['outputenc'] == 'CP950'){ echo ' selected="selected"'; } ?>>CP950</option>
-					    <option value="BIG-5"<?php if($Request->response['outputenc'] == 'BIG-5'){ echo ' selected="selected"'; } ?>>BIG-5</option>
-					    <option value="EUC-KR"<?php if($Request->response['outputenc'] == 'EUC-KR'){ echo ' selected="selected"'; } ?>>EUC-KR</option>
-					    <option value="UHC (CP949)"<?php if($Request->response['outputenc'] == 'UHC (CP949)'){ echo ' selected="selected"'; } ?>>UHC (CP949)</option>
-					    <option value="ISO-2022-KR"<?php if($Request->response['outputenc'] == 'ISO-2022-KR'){ echo ' selected="selected"'; } ?>>ISO-2022-KR</option>
-					    <option value="Windows-1251 (CP1251)"<?php if($Request->response['outputenc'] == 'Windows-1251 (CP1251)'){ echo ' selected="selected"'; } ?>>Windows-1251 (CP1251)</option>
-					    <option value="Windows-1252 (CP1252)"<?php if($Request->response['outputenc'] == 'Windows-1252 (CP1252)'){ echo ' selected="selected"'; } ?>>Windows-1252 (CP1252)</option>
-					    <option value="CP866 (IBM866)"<?php if($Request->response['outputenc'] == 'CP866 (IBM866)'){ echo ' selected="selected"'; } ?>>CP866 (IBM866)</option>
-					    <option value="KOI8-R"<?php if($Request->response['outputenc'] == 'KOI8-R'){ echo ' selected="selected"'; } ?>>KOI8-R</option>
-					    <option value="PUNYCODE"<?php if($Request->response['outputenc'] == 'PUNYCODE'){ echo ' selected="selected"'; } ?>>PUNYCODE</option>
-					</select>
+					<?php
+					for($i=0;$i<=count($encoding_list)-1;$i++)
+					{
+						$is_output_selected = '';
+						if ($encoding_list[$i]==$Request->response['outputenc'])
+						{
+							$is_output_selected=' selected="selected"';
+						}						
+						echo '<option value="'.$encoding_list[$i].'"'. $is_output_selected.'>'.$encoding_list[$i].'</option>';
+					}
+					?>
+					</select>&nbsp;<span style="position:relative;top:-10px">[<a href="#" title="Find it in Wiki" onclick="window.open('http://en.wikipedia.org/wiki/Special:Search?search='+document.getElementById('output-encoding').options[document.getElementById('output-encoding').selectedIndex].value+ ' Encoding')">charset info</a>]</span>
 				</fieldset>
 				<fieldset>
 					<button type="button" id="input-to-charcode" onclick="Encoder.toCharCode('input');">toCharCode()</button> 
@@ -214,13 +139,13 @@ $Request->response['outputtext'];
                             <option onclick="Encoder.fromBase64('input');">from Base64</option>
 							<option onclick="Encoder.fromBase62('input');">from Base62</option>                  
                         </optgroup>
-		                    <optgroup label="Convert">
+		                <optgroup label="Convert">
                             <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
                             <option onclick="Encoder.fromEntToBs('input');">from &amp;#NN; to \NN</option>
+				            <option onclick="Encoder.fromLftoCrlf('input');">from %0A to %0D%0A</option>
                         </optgroup>
-                        </optgroup>
-		                    <optgroup label="Misc">
-                            <option onclick="Encoder.Minify('input');">Minify</option>                            
+                       <optgroup label="Misc">
+                            <option onclick="Encoder.Minify('input');">Minify</option>
                         </optgroup>
                     </select>                        
                     <select onchange="Encoder.fromVectorSource(this, 'input')">
@@ -228,23 +153,26 @@ $Request->response['outputtext'];
                         <?php echo $options; ?>
                     </select>
                     <br />
-					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo isset($_GET['hv'])?htmlspecialchars(rawurldecode($_GET['hv']), ENT_QUOTES, 'UTF-8'):'';?><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
+					<textarea name="input-text" id="input-text" cols="75" rows="6">
+                        <?php echo isset($_GET['hv'])?htmlspecialchars(rawurldecode($_GET['hv']), ENT_QUOTES, 'UTF-8'):'';?>
+                        <?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?>
+                    </textarea>
 				</fieldset>
                 <fieldset>
-				    <input id="submit" type="submit" value="Convert me!" /> <input id="reset" type="reset" value="Clear All" />
+				    <input id="submit" type="submit" value="Convert me!" /> &nbsp;&nbsp;<input id="h4kvertor" type="button" onclick="Encoder.Send2HV('input');" value="Send to HackVertor API" /> &nbsp;&nbsp;<input id="reset" type="reset" value="Clear All" />
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.co.nr" target="_blank">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/02/15</div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/03/19</div>
         <div id="selfpromotion">
-            <h3>Other cool stuff</h3>
+            <h3>Other cool stuff:</h3>
             <ul>
-                <li><a href="http://h4k.in/lockr">Lock&#x42f;</a></li>
                 <li><a href="http://h4k.in/encoding">PHP Charset Encoder</a></li>
                 <li><a href="http://h4k.in/characters">PHP Unicode Generator</a></li>
                 <li><a href="http://phpids.heideri.ch/">PHPIDS Smoketest</a></li>
                 <li><a href="http://h4k.in/dataurl">data: URL testcases</a></li>
             </ul>
         </div>
+        <script type="text/javascript">document.getElementById('input-text').focus();</script>
 	</body>
 </html>

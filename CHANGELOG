@@ -1,0 +1,15 @@
+ *  [2008March14 by d0ubl3_h3lix@yehg.co.nr]
+ *      - Major change in I/O encoding list
+ *       - I/O encoding list dynamically grapped from native mb_list_encodings array
+ *      - PHP Version 5.2.5 supports 64 kinds of to-and-from encoding; Prior PCE supported 53
+ *      - Added HackVertor Button
+ *      - Added from %0a to %0d%a function	
+ *      - Added 'Find it in Wiki' link for quick-look at unfamiliar Encoding Types	
+ *  [2008Feb15 by d0ubl3_h3lix@yehg.co.nr] 
+ * 		- Integrated DeanEdwards' Packer as Base62,Minify in Enc/Dec dropdown 
+ *      - Hexcoded your email to hide from spammers :)
+ *      - Re-arrange folder structures for well organizations:js,css,php according to your sugguestions
+ *      - Fixed CSS 'px' to '%' to be viewed by all lower screen resolutions monitors   
+ *  [2008Feb13 by d0ubl3_h3lix@yehg.co.nr] 
+ * 		- added PunyCode in I/O encoding dropdown
+ *      - added base64 JS  Enc/Dec dropdown;comment base64 in I/O encoding dropdown 'coz it's redundant
