@@ -6,6 +6,7 @@
  *  @author mario
  *  @package Encoder
  *  @license http://www.gnu.org/licenses/lgpl.html LGPL
+ *  @lastmodified: 2008 March 14 by d0ubl3_h3lix <yehg.org>
  */
 class Encoder_Request {
 
@@ -36,21 +37,25 @@ class Encoder_Request {
             
             if ($this->response['outputenc'] == 'PUNYCODE')
             {
-				require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
-				require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
-			
-				$IDN = new idna_convert();	
-				$this->response['outputtext'] =  $IDN->encode(encode_utf8($this->response['inputtext'], $this->response['inputenc']));
+				$this->response['outputtext'] =  $this->punyencode($this->response['inputtext'],$this->response['inputenc']);
 							
 			}
 			else if($this->response['inputenc'] == 'PUNYCODE')
 			{
-				require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
-				require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
-			
-				$IDN = new idna_convert();	
-				$this->response['outputtext'] =  $IDN->decode($this->response['inputtext']);
+				$this->response['outputtext'] =	$this->punydecode($this->response['inputtext']);	
 			}
+			// UUEncode in mb_convert_encoding doesn't actually do conversion!!
+			// That's why it seems php developers implemented a different function 
+			// called convert_uuencode. 
+            else if ($this->response['outputenc'] == 'UUENCODE')
+            {
+				$this->response['outputtext'] =  convert_uuencode($this->response['inputtext']);
+							
+			}
+			else if($this->response['inputenc'] == 'UUENCODE')
+			{
+				$this->response['outputtext'] =	convert_uudecode($this->response['inputtext']);	
+			}			
 			else
 			{
 				$this->response['outputtext'] = mb_convert_encoding(
@@ -69,4 +74,20 @@ class Encoder_Request {
 
         return true;
     }
+    public function punyencode($inputtext,$inputenc)
+    {
+		require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+		require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
+	
+		$IDN = new idna_convert();	
+		return $IDN->encode(encode_utf8($inputtext,$inputenc));	
+	}	
+    public function punydecode($inputtext)
+    {
+		require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+		require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
+	
+		$IDN = new idna_convert();	
+		return $IDN->decode($this->response['inputtext']);		
+	}
 }

@@ -1,4 +1,4 @@
-// Added Base64
+//@modified: March 14, 2008
 
 var Encoder = new Object;
 
@@ -33,6 +33,16 @@ Encoder.toUrlEncode = function (field){
 	if(text.length > 0){
 		output = encodeURIComponent(text);
 		document.getElementById(field + '-text').value = output;
+	}
+	return false;
+}
+Encoder.Send2HV = function (field){
+	var tmptext = document.getElementById(field+'-text').value;
+	if(tmptext.length > 0){	
+		Encoder.toBase64('input');	
+		var win_hv = window.open("http://www.businessinfo.co.uk/labs/hackvertor/hackvertor.php?input="+document.getElementById(field+'-text').value);
+		document.getElementById(field+'-text').value = tmptext;
+		if (win_hv==null)alert("Please allow Popup!");
 	}
 	return false;
 }
@@ -344,6 +354,13 @@ Encoder.fromBsToEnt = function(field) {
 Encoder.fromEntToBs = function(field) {
     var text = document.getElementById(field + '-text').value;
     var output = text.replace(/&#(\w{2,5});/ig, '\\\$1'); 
+    document.getElementById(field + '-text').value = output;
+    return false;
+}
+
+Encoder.fromLftoCrlf = function(field) {
+    var text = document.getElementById(field + '-text').value;
+    var output = text.replace(/%0A/ig, '%0D%0A'); 
     document.getElementById(field + '-text').value = output;
     return false;
 }
