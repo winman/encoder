@@ -1,4 +1,4 @@
-//@modified: March 14, 2008
+//@modified: March 24, 2008
 
 var Encoder = new Object;
 
@@ -14,7 +14,7 @@ Encoder.toCharCode = function (field){
 		}
 		document.getElementById(field + '-text').value = charcode;										
 	}
-	return false;
+	this.SetFocus(field);return false;
 }
 Encoder.fromCharCode = function (field){
 	var text = document.getElementById(field + '-text').value;
@@ -26,7 +26,7 @@ Encoder.fromCharCode = function (field){
 		}					
 		document.getElementById(field + '-text').value = output;	
 	}
-	return false;
+	this.SetFocus(field);return false;
 }
 Encoder.toUrlEncode = function (field){
 	var text = document.getElementById(field + '-text').value;
@@ -34,25 +34,16 @@ Encoder.toUrlEncode = function (field){
 		output = encodeURIComponent(text);
 		document.getElementById(field + '-text').value = output;
 	}
-	return false;
+	this.SetFocus(field);return false;
 }
-Encoder.Send2HV = function (field){
-	var tmptext = document.getElementById(field+'-text').value;
-	if(tmptext.length > 0){	
-		Encoder.toBase64('input');	
-		var win_hv = window.open("http://www.businessinfo.co.uk/labs/hackvertor/hackvertor.php?input="+document.getElementById(field+'-text').value);
-		document.getElementById(field+'-text').value = tmptext;
-		if (win_hv==null)alert("Please allow Popup!");
-	}
-	return false;
-}
+
 Encoder.fromUrlEncode = function (field){
 	var text = document.getElementById(field + '-text').value;
 	if(text.length > 0){
 		output = decodeURIComponent(text);
 		document.getElementById(field + '-text').value = output;
 	}
-	return false;
+	this.SetFocus(field);return false;
 }
 Encoder.toHexEnt = function (field){
     var text = document.getElementById(field + '-text').value;
@@ -61,7 +52,7 @@ Encoder.toHexEnt = function (field){
         output += '&#x' + text.charCodeAt(i).toString(16) + ';';
     }
     document.getElementById(field + '-text').value = output;
-    return false;
+	this.SetFocus(field);return false;
 }
 Encoder.toDecEnt = function (field){
     var text = document.getElementById(field + '-text').value;
@@ -70,7 +61,7 @@ Encoder.toDecEnt = function (field){
         output += '&#' + text.charCodeAt(i).toString(10) + ';';
     }
     document.getElementById(field + '-text').value = output;
-    return false;
+	this.SetFocus(field);return false;
 }
 Encoder.toOctEnt = function (field){
     var text = document.getElementById(field + '-text').value;
@@ -79,9 +70,18 @@ Encoder.toOctEnt = function (field){
         output += '\\' + text.charCodeAt(i).toString(8);
     }
     document.getElementById(field + '-text').value = output;
-    return false;
+    this.SetFocus(field);return false;
 }
 
+//FIXED : JS Base64 Buggy Issue
+Encoder.Send2HV = function (field){
+	var text = document.getElementById(field+'-text').value;
+	if(text.length > 0){
+		var win_hv = window.open("?sendtohackvertor="+escape(document.getElementById(field+'-text').value));
+		if (win_hv==null)alert("Please allow Popup!");
+	}
+	this.SetFocus(field);return false;
+}
 /***** [BASE64 ROUTINE] *****/
 // Credits: RSnake http://ha.ckers.org/xss.html
 var base64Chars = new Array(
@@ -169,7 +169,7 @@ Encoder.toBase64 = function (field){
         }
     }
     document.getElementById(field + '-text').value = result;
-    return false;
+    this.SetFocus(field);return false;
 }
 
 Encoder.fromBase64 = function (field){
@@ -195,7 +195,7 @@ Encoder.fromBase64 = function (field){
         }
     }
     document.getElementById(field + '-text').value = result;
-    return false;
+    this.SetFocus(field);return false;
 }
 
 /***** [/BASE64 ROUTINE] *****/
@@ -211,26 +211,41 @@ Encoder.toBase62 = function (field){
 		var result = packer.pack(text, true, false);
 		document.getElementById(field + '-text').value = result;
 	}
-    return false;
+    this.SetFocus(field);return false;
 }
 Encoder.fromBase62 = function (field){
     var text = document.getElementById(field + '-text').value;
     eval("var Base62Value=String" + text.slice(4));
 	document.getElementById(field + '-text').value = Base62Value;
-    return false;
+    this.SetFocus(field);return false;
 }
-Encoder.Minify = function (field){
-	var x = confirm("Minizing or compressing will cause your payload to fail\nbecause it removes all comments, whitespaces,carriage returns\nthat you might have used to bypass filters.\n\nAnyway, continue?");
-	if(x)
-	{
-		var packer = new Packer;
-	    var text = document.getElementById(field + '-text').value;
-		var result = packer.pack(text, false, false);
-		document.getElementById(field + '-text').value = result;	
-	}	
-    return false;
-}
+
 /***** [/BASE62 ROUTINE] *****/
+Encoder.toUnicode = function (field){
+    var text = document.getElementById(field + '-text').value;
+    var output = ''		            
+    for (var i=0; i<text.length; i++) {
+        output += '%u00' + text.charCodeAt(i).toString(16) ;
+    }
+    document.getElementById(field + '-text').value = output;
+	this.SetFocus(field);return false;
+}
+Encoder.fromUnicode = function (field){
+    var text = document.getElementById(field + '-text').value;
+    var array = text.split('%u00');
+    var output = '';    
+    for (var i=0; i<array.length; i++) {
+        var node = array[i].replace('%u00','');        
+        if(node != ''){
+            output += String.fromCharCode(parseInt(node,16));        
+        }
+    }
+    if(output != ''){
+        document.getElementById(field + '-text').value = output;
+    }
+    this.SetFocus(field);return false;
+}
+
 Encoder.fromHexEnt = function (field){
     var text = document.getElementById(field + '-text').value;
     var array = text.split(';');
@@ -244,7 +259,7 @@ Encoder.fromHexEnt = function (field){
     if(output != ''){
         document.getElementById(field + '-text').value = output;
     }
-    return false;
+    this.SetFocus(field);return false;
 }
 Encoder.fromDecEnt = function (field){
     var text = document.getElementById(field + '-text').value;
@@ -259,7 +274,7 @@ Encoder.fromDecEnt = function (field){
     if(output != ''){
         document.getElementById(field + '-text').value = output;
     }
-    return false;
+    this.SetFocus(field);return false;
 }
 Encoder.fromOctEnt = function (field){
     var text = document.getElementById(field + '-text').value;
@@ -274,13 +289,12 @@ Encoder.fromOctEnt = function (field){
     if(output != ''){
         document.getElementById(field + '-text').value = output;
     }
-    return false;
+    this.SetFocus(field);return false;
 }
 Encoder.fromVectorSource = function (option, field){
     var exploit = option.options[option.selectedIndex].value;
     document.getElementById(field + '-text').value = exploit;
-
-    return false;
+    this.SetFocus(field);return false;
 }
 
 Encoder.fromSQLHex = function(field) {
@@ -299,7 +313,7 @@ Encoder.fromSQLHex = function(field) {
     if(output != ''){
         document.getElementById(field + '-text').value = output;
     }
-    return false;  
+    this.SetFocus(field);return false;  
 }
 
 Encoder.toSQLHex = function(field) {
@@ -315,7 +329,7 @@ Encoder.toSQLHex = function(field) {
 		document.getElementById(field + '-from-charcode').disabled=false;
 		document.getElementById(field + '-to-charcode').disabled=true;
 	}
-	return false;
+	this.SetFocus(field);return false;
 }
 
 Encoder.toSQLChar = function (field){
@@ -325,7 +339,7 @@ Encoder.toSQLChar = function (field){
         output += 'Char(' + text.charCodeAt(i).toString(10) + '),';
     }
     document.getElementById(field + '-text').value = output.substr(0,output.length-1);
-    return false;
+    this.SetFocus(field);return false;
 }
 
 Encoder.fromSQLChar = function (field){
@@ -341,26 +355,171 @@ Encoder.fromSQLChar = function (field){
     if(output != ''){
         document.getElementById(field + '-text').value = output;
     }
-    return false;
+    this.SetFocus(field);return false;
 }
 
 Encoder.fromBsToEnt = function(field) {
     var text = document.getElementById(field + '-text').value;
     var output = text.replace(/\\(\w{2,5})/ig, '&#$1;'); 
     document.getElementById(field + '-text').value = output;
-    return false;
+    this.SetFocus(field);return false;
 }
 
 Encoder.fromEntToBs = function(field) {
     var text = document.getElementById(field + '-text').value;
     var output = text.replace(/&#(\w{2,5});/ig, '\\\$1'); 
     document.getElementById(field + '-text').value = output;
-    return false;
+    this.SetFocus(field);return false;
 }
-
+Encoder.toUnicode = function (field){
+    var text = document.getElementById(field + '-text').value;
+    var output = ''		            
+    for (var i=0; i<text.length; i++) {
+        output += '%u00' + text.charCodeAt(i).toString(16) ;
+    }
+    document.getElementById(field + '-text').value = output;
+	this.SetFocus(field);return false;
+}
+Encoder.fromPercent2Slash = function(field) {
+    var text = document.getElementById(field + '-text').value;
+    var output = text.replace(/%/ig, '\\'); 
+    document.getElementById(field + '-text').value = output;
+    this.SetFocus(field);return false;
+}
 Encoder.fromLftoCrlf = function(field) {
     var text = document.getElementById(field + '-text').value;
     var output = text.replace(/%0A/ig, '%0D%0A'); 
     document.getElementById(field + '-text').value = output;
-    return false;
+    this.SetFocus(field);return false;
+}
+
+/****** Misc Funcs *******/
+Encoder.Minify = function (field){
+	var x = confirm("Minizing or compressing will cause your payload to fail\nbecause it removes all comments, whitespaces,carriage returns\nthat you might have used to bypass filters.\n\nAnyway, continue?");
+	if(x)
+	{
+		var packer = new Packer;
+	    var text = document.getElementById(field + '-text').value;
+		var result = packer.pack(text, false, false);
+		document.getElementById(field + '-text').value = result;	
+	}	
+    this.SetFocus(field);return false;
+}
+Encoder.CalcLength = function (field){
+	var text = document.getElementById(field + '-text').value;
+	alert(text.length);	
+
+    this.SetFocus(field);return false;
+}
+var last_saved_cookie_name = '';
+
+Encoder.RestoreCookie = function (field){
+	var text = document.getElementById(field + '-text').value;
+	var cookie_name = prompt("Enter a cookie name to retrieve your customed attack payload.\nIf you forget it, choose 'view all cookies'.",last_saved_cookie_name);
+	if (cookie_name==null||cookie_name=='')return;
+	if (document.cookie.indexOf(cookie_name)>=0)
+	{
+	   	var output = this.GetCookie(cookie_name) ;
+		document.getElementById(field + '-text').value = unescape(output);
+	}
+
+    this.SetFocus(field);return false;
+}
+Encoder.SaveCookie = function (field){
+	var text = document.getElementById(field + '-text').value;
+	var cookie_name = prompt("Enter a cookie name to save your customed attack payload.\nIt will overwrite previous cookie if their names are equivalent.");
+	var cookie_value = text; 
+	if (cookie_name==null||cookie_name=='')return;
+	if (text.length>0)
+	{
+	 	var expdate = new Date();
+		expdate.setTime (expdate.getTime() + (24 * 60 * 60 * 1000 * 31));
+		last_saved_cookie_name = cookie_name;
+		this.SetCookie (cookie_name, cookie_value, expdate);		
+	}	
+
+    this.SetFocus(field);return false;
+}
+Encoder.GetCookieVal = function (offset) {
+	var endstr = document.cookie.indexOf (";", offset);
+	if (endstr == -1)
+	endstr = document.cookie.length;
+	return unescape(document.cookie.substring(offset, endstr));
+}
+Encoder.GetCookie = function(name) {
+	var arg = name + "=";
+	var alen = arg.length;
+	var clen = document.cookie.length;
+	var i = 0;
+	while (i < clen) {
+	var j = i + alen;
+	if (document.cookie.substring(i, j) == arg)
+	return this.GetCookieVal (j);
+	i = document.cookie.indexOf(" ", i) + 1;
+	if (i == 0) break; 
+	}
+	return null;
+}  
+Encoder.SetCookie=function (name, value) {
+	var argv = this.SetCookie.arguments;
+	var argc = this.SetCookie.arguments.length;
+	var expires = (argc > 2) ? argv[2] : null;
+	var path = (argc > 3) ? argv[3] : null;
+	var domain = (argc > 4) ? argv[4] : null;
+	var secure = (argc > 5) ? argv[5] : false;	
+	document.cookie = name + "=" + escape (value) +
+	((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
+	((path == null) ? "" : ("; path=" + path)) +
+	((domain == null) ? "" : ("; domain=" + domain)) +
+	((secure == true) ? "; secure" : "");
+}
+Encoder.SetFocus = function (field){
+   document.getElementById(field + '-text').focus();
+}
+Encoder.Reverse = function (field){
+   var text = document.getElementById(field + '-text').value;
+   var output = text.split("").reverse().join("");
+   document.getElementById(field + '-text').value = output;
+}
+Encoder.IncrementChar = function(field)
+{
+	var text = document.getElementById(field + '-text').value;
+	if(text.length > 0){
+		var charcode = new Array;
+		for(i=0;text.length>i;i++){
+			charcode += text.charCodeAt(i)+1;
+			if(i<(text.length-1)){
+				charcode +=  ',';
+			}
+		}
+		charcode = charcode.split(',');
+		output = '';
+		for(i=0;charcode.length>i;i++){
+			output += String.fromCharCode(charcode[i]);
+		}					
+		document.getElementById(field + '-text').value = output;	
+			
+	}
+	this.SetFocus(field);return false;	
+}
+Encoder.DecrementChar = function(field)
+{
+	var text = document.getElementById(field + '-text').value;
+	if(text.length > 0){
+		var charcode = new Array;
+		for(i=0;text.length>i;i++){
+			charcode += text.charCodeAt(i)-1;
+			if(i<(text.length-1)){
+				charcode +=  ',';
+			}
+		}
+		charcode = charcode.split(',');
+		output = '';
+		for(i=0;charcode.length>i;i++){
+			output += String.fromCharCode(charcode[i]);
+		}					
+		document.getElementById(field + '-text').value = output;	
+			
+	}
+	this.SetFocus(field);return false;	
 }

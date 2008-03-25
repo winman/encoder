@@ -96,9 +96,15 @@ input, textarea {
     font-size: 1.4em;
 	width: 450px;
 	margin: 5px;
-	padding: 0 20px;
+	padding: 0 5px 0 5px;
 }
-
+input:hover,button:hover{
+    color: #e3b023!important;
+	border: 2px solid #bd370d; 
+	background: #bd370d!important;
+    margin: 10px 0;
+    cursor:pointer;
+}
 input[type=submit], button, select {
     color: #bd370d;
 	border: 2px solid #bd370d; 
@@ -119,12 +125,12 @@ input[type=reset]{
     width:150px!important;
     text-align:center;
 }
-input#h4kvertor{
+input[id=h4kvertor]{
     color: #bd370d;
 	border: 2px solid #bd370d; 
 	background: #e3b023;
     margin: 10px 0;
-    width:325px!important;
+    width:170px!important;
     text-align:center;
 }
 
@@ -140,7 +146,7 @@ label {
 textarea {
     font-size: 1.5em;
     height: 150px;
-    width: 97%;
+    width: 99%;
     position: relative;
     left: -5px;
 }
