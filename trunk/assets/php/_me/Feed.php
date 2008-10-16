@@ -10,13 +10,6 @@
 class Encoder_Feed {
     
     /**
-     *  the feed url
-     * 
-     *  @access private
-     */
-    private $feedUrl = '';
-    
-    /**
      *  
      */
     public function __construct() {
@@ -30,16 +23,17 @@ class Encoder_Feed {
      */
     public function createHTMLOptions() {
 
-        $source = file_get_contents($this->feedUrl);
-        $feed = new XML_Feed_Parser($source);            
-        
+        $handle = fopen("/home/x00mario/public_html/encoding/assets/php/_me/xssdb.csv", "r");
+        $feed = array();        
+        while (($data = fgetcsv($handle, 1000, ",")) !== false) {
+            $feed[] = $data;
+        }
+        fclose($handle);           
+        unset($feed[0]);        
         $options = NULL;
-        
         foreach ($feed as $entry) {
-            preg_match('/Exploit String: <\/b>(.*)<br><b>Exploit Description:/ism', $entry->description, $matches);
-            $matches[1] = $this->replaceBRTags($matches[1]);
-            $options .= '<option value="'.htmlspecialchars($matches[1]).'">' . htmlentities($entry->title) . '</option>';
-        } 
+            $options .= '<option value="'.htmlspecialchars($entry[1]).'">' . htmlentities($entry[0]) . '</option>';
+        }
 
         return $options;         
     }
