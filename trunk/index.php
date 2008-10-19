@@ -81,7 +81,6 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
 					<?
 					$selected_input = $Request->response['inputenc'];					
 
-
 					for($i=0;$i<=count($encoding_list)-1;$i++)
 					{
 						$is_input_selected = '';
@@ -107,7 +106,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
 						echo '<option value="'.$encoding_list[$i].'"'. $is_output_selected.'>'.$encoding_list[$i].'</option>';
 					}
 					?>
-					</select>&nbsp;<span style="position:relative;top:-10px">[<a href="#" title="Find it in Wiki" onclick="window.open('http://en.wikipedia.org/wiki/Special:Search?search='+document.getElementById('output-encoding').options[document.getElementById('output-encoding').selectedIndex].value+ ' Encoding')">charset info</a>]</span>
+					</select>&nbsp;<span>[<a href="#" title="Find it in Wiki" onclick="window.open('http://en.wikipedia.org/wiki/Special:Search?search='+document.getElementById('output-encoding').options[document.getElementById('output-encoding').selectedIndex].value+ ' Encoding')">charset info</a>]</span>
 				</fieldset>
 				<fieldset>
 					<button type="button" id="input-to-charcode" onclick="Encoder.toCharCode('input');">toCharCode()</button> 
@@ -115,65 +114,77 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
 					<button type="button" id="input-from-charcode" onclick="Encoder.fromCharCode('input');">fromCharCode()</button>
 					<button type="button" id="input-from-urlencode" onclick="Encoder.fromUrlEncode('input');">decodeURIComponent()</button> 
                     <select id="encdec" onblur="setTimeout('document.getElementById(\'encdec\').selectedIndex=0',7000)">
-                    	<option>--Encoder/Decoder--</option>
+                        <option>--Encoder/Decoder--</option>
                         <optgroup label="Encode">                            
                             <option onclick="Encoder.toDecEnt('input');">to decimal entities</option>
                             <option onclick="Encoder.toHexEnt('input');">to HEX entities</option>
                             <option onclick="Encoder.toUnicode('input');">to Unicode(%u00)</option>
                             <option onclick="Encoder.toSQLHex('input');">to SQL HEX()</option>
-			                <option onclick="Encoder.toSQLChar('input');">to SQL Char()</option>
+                            <option onclick="Encoder.toSQLChar('input');">to SQL Char()</option>
                             <option onclick="Encoder.toOctEnt('input');">to octal JS entities</option>
                             <option onclick="Encoder.toBase64('input');">to Base64</option>
                             <option onclick="Encoder.toBase62('input');">to Base62</option>
                         </optgroup>
-		                <optgroup label="Decode">                            
+                        <optgroup label="Decode">                            
                             <option onclick="Encoder.fromDecEnt('input');">from decimal entities</option>
                             <option onclick="Encoder.fromHexEnt('input');">from HEX entities</option>
                             <option onclick="Encoder.fromUnicode('input');">from Unicode(%u00)</option>
                             <option onclick="Encoder.fromSQLHex('input');">from SQL HEX()</option>
-			                <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
+                            <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
                             <option onclick="Encoder.fromOctEnt('input');">from octal JS entities</option>
                             <option onclick="Encoder.fromBase64('input');">from Base64</option>
-							<option onclick="Encoder.fromBase62('input');">from Base62</option>                  
+                            <option onclick="Encoder.fromBase62('input');">from Base62</option>                  
                         </optgroup>
-		                <optgroup label="Convert">
+                        <optgroup label="Convert">
                             <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
                             <option onclick="Encoder.fromEntToBs('input');">from &amp;#NN; to \NN</option>
-							<option onclick="Encoder.fromPercent2Slash('input');">from % to \</option>
-                             
-				            <option onclick="Encoder.fromLftoCrlf('input');">from %0A to %0D%0A</option>
+                            <option onclick="Encoder.fromPercent2Slash('input');">from % to \</option>
+                            <option onclick="Encoder.fromLftoCrlf('input');">from %0A to %0D%0A</option>
                         </optgroup>
                     </select> 
-					<select id="misc" onblur="setTimeout('document.getElementById(\'misc\').selectedIndex=0',7000)">
-					   <option>------- MISC -------</option>  
-					   <option onclick="Encoder.Reverse('input');">Reverse</option>               		 		     		 <option onclick="Encoder.IncrementChar('input');">Char++</option>
-					   <option onclick="Encoder.DecrementChar('input');">Char--</option>
-                       <option onclick="Encoder.Minify('input');">Minify</option>
-                       <option onclick="Encoder.CalcLength('input');">ContentLength</option><option onclick="Encoder.SaveCookie('input');">Save to Cookie</option><option onclick="Encoder.RestoreCookie('input');">Get from Cookie</option>
-					   <option onclick="alert('Cookie Data:\n'+document.cookie+'\n\n\nSize(max 16KB):\n'+document.cookie.length/1000+' KB')">View All Cookies</option>                					
-					</select>                       
-                    <select onchange="Encoder.fromVectorSource(this, 'input')">
-                        <option value="">-----------------Updated XSS Payloads---------------------</option>
+                    <select id="misc" onblur="setTimeout('document.getElementById(\'misc\').selectedIndex=0',7000)">
+                        <option>------- MISC -------</option>  
+                        <option onclick="Encoder.Reverse('input');">Reverse</option>               		 		     		 
+                        <option onclick="Encoder.IncrementChar('input');">Char++</option>
+                        <option onclick="Encoder.DecrementChar('input');">Char--</option>
+                        <option onclick="Encoder.Minify('input');">Minify</option>
+                        <option onclick="Encoder.CalcLength('input');">ContentLength</option><option onclick="Encoder.SaveCookie('input');">Save to Cookie</option>
+                        <option onclick="Encoder.RestoreCookie('input');">Get from Cookie</option>
+                        <option onclick="alert('Cookie Data:\n'+document.cookie+'\n\n\nSize(max 16KB):\n'+document.cookie.length/1000+' KB')">View All Cookies</option>
+                    </select>                       
+                    <select id="vectors" onchange="Encoder.fromVectorSource(this, 'input')">
+                        <option value="">---XSS Payloads---</option>
                         <?php echo $options; ?>
                     </select>
                     <br />
 					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
 				</fieldset>
                 <fieldset>
-				    <input id="submit" type="submit" value="Convert me!" title="Convert from Selected Input encoding to Output encoding (alt+c)"  accesskey="c" /> &nbsp;&nbsp;<input id="h4kvertor" type="button" onclick="Encoder.Send2HV('input');" value="Send to HackVertor API" title="Send to HackVertor API (alt+s)"  accesskey="s" /> &nbsp;&nbsp;<input id="reset" type="reset" value="Clear All" />
+				    <input id="submit" type="submit" value="Convert me!" title="Convert from Selected Input encoding to Output encoding (alt+c)" accesskey="c" />
+                    &nbsp;&nbsp;
+                    <input id="h4kvertor" type="button" onclick="Encoder.Send2HV('input');" value="Send to HackVertor API" title="Send to HackVertor API (alt+s)" accesskey="s" />
+                    &nbsp;&nbsp;<input id="repeat" type="submit" value="Repeat" /><input type="text" name="times" id="times" />times
+                    &nbsp;&nbsp;<input id="reset" type="reset" value="Clear All" />
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/03/23</div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/10/19</div>
         <div id="selfpromotion">
             <h3>Other cool stuff:</h3>
             <ul>
-                <li><a href="http://h4k.in/encoding">PHP Charset Encoder</a></li>
                 <li><a href="http://h4k.in/characters">PHP Unicode Generator</a></li>
-                <li><a href="http://phpids.heideri.ch/">PHPIDS Smoketest</a></li>
+                <li><a href="http://demo.php-ids.org/">PHPIDS Smoketest</a></li>
                 <li><a href="http://h4k.in/dataurl">data: URL testcases</a></li>
             </ul>
         </div>
         <script type="text/javascript">document.getElementById('input-text').focus();</script>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	var pageTracker = _gat._getTracker("UA-82607-10");
+	pageTracker._trackPageview();
+	</script>
 	</body>
 </html>
