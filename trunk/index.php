@@ -157,7 +157,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                         <?php echo $options; ?>
                     </select>
                     <br />
-					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?></textarea>
+					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?><?php echo htmlspecialchars(stripslashes(preg_replace('/(^\s*)|(\s*$)/im', null, $_GET['hv']))); ?></textarea>
 				</fieldset>
                 <fieldset>
 				    <input id="submit" type="submit" value="Convert me!" title="Convert from Selected Input encoding to Output encoding (alt+c)" accesskey="c" />
