@@ -1,8 +1,9 @@
+[2008December15 by mario.heiderich@gmail.com]
+    - FIXED: JS Unicode encoding/decoding
 [2008March23 by d0ubl3_h3lix@yehg.co.nr]
     - FIXED: JS Base64 buggy issue (in some advanced payloads because they break/jump out of variable boundary) by using Server-Side Base64 and HeaderRedirect to HackVertor
  	- Added cookie save-retrieve functions for customed attack playload
  	- Added Unicode (%u00), Reverse, Char++,Char-- functions
- 
 [2008March14 by d0ubl3_h3lix@yehg.co.nr]
    - Major change in I/O encoding list
     - I/O encoding list dynamically grapped from native mb_list_encodings array
