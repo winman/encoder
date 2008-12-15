@@ -157,7 +157,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                         <?php echo $options; ?>
                     </select>
                     <br />
-					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?><?php echo htmlspecialchars(stripslashes(preg_replace('/(^\s*)|(\s*$)/im', null, $_GET['hv']))); ?></textarea>
+					<textarea name="input-text" id="input-text" cols="75" rows="6"><?php echo htmlspecialchars(stripslashes($Request->response['outputtext'])); ?><?php echo htmlspecialchars(stripslashes(preg_replace('/(^\s*)|(\s*$)/im', null, isset($_GET['hv'])?$_GET['hv']:''))); ?></textarea>
 				</fieldset>
                 <fieldset>
 				    <input id="submit" type="submit" value="Convert me!" title="Convert from Selected Input encoding to Output encoding (alt+c)" accesskey="c" />
@@ -168,7 +168,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/10/19</div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/12/15</div>
         <div id="selfpromotion">
             <h3>Other cool stuff:</h3>
             <ul>

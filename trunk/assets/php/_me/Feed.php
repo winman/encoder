@@ -23,7 +23,7 @@ class Encoder_Feed {
      */
     public function createHTMLOptions() {
 
-        $handle = fopen("/home/x00mario/public_html/encoding/assets/php/_me/xssdb.csv", "r");
+        $handle = fopen(dirname(__FILE__) . "/xssdb.csv", "r");
         $feed = array();        
         while (($data = fgetcsv($handle, 1000, ",")) !== false) {
             $feed[] = $data;
