@@ -10,13 +10,6 @@
 class Encoder_Feed {
     
     /**
-     *  
-     */
-    public function __construct() {
-        
-    }
-
-    /**
      *  returns HTML option tags with the needed feed items
      * 
      *  @return string exploit options
@@ -32,22 +25,18 @@ class Encoder_Feed {
         unset($feed[0]);        
         $options = NULL;
         foreach ($feed as $entry) {
-            $options .= '<option value="'.htmlspecialchars($entry[1]).'">' . htmlentities($entry[0]) . '</option>';
+            $options .= '<option value="'.htmlspecialchars($entry[1]).'">' 
+                . htmlentities($entry[0]) . '</option>';
         }
 
         return $options;         
     }
-
-    public function replaceBRTags($string) {
-        
-        $string = str_replace('<br>', "\n", $string);
-        $string = str_replace('<br/>', "\n", $string);
-        
-        return $string;
-    }
     
     /**
-     *  
+     * Setter for the feed URL
+     * 
+     * @param  string feed url
+     * @throws InvalidArgumentException
      */
     public function setFeedUrl($feedUrl = null) {
         if(!empty($feedUrl)){
