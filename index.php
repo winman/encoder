@@ -10,7 +10,6 @@
             
 
 # include needed files
-require 'XML/Feed/Parser.php';
 require 'assets/php/_me/Feed.php';
 require 'assets/php/_me/Request.php';
 
