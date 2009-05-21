@@ -10,6 +10,7 @@
             
 
 # include needed files
+require 'XML/Feed/Parser.php';
 require 'assets/php/_me/Feed.php';
 require 'assets/php/_me/Request.php';
 
@@ -109,9 +110,9 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
 				</fieldset>
 				<fieldset>
 					<button type="button" id="input-to-charcode" onclick="Encoder.toCharCode('input');">toCharCode()</button> 
-					<button type="button" id="input-to-urlencode" onclick="Encoder.toUrlEncode('input');">encodeURIComponent()</button> 
+					<button type="button" id="input-to-urlencode" onclick="Encoder.escape('input');">escape()</button> 
 					<button type="button" id="input-from-charcode" onclick="Encoder.fromCharCode('input');">fromCharCode()</button>
-					<button type="button" id="input-from-urlencode" onclick="Encoder.fromUrlEncode('input');">decodeURIComponent()</button> 
+					<button type="button" id="input-from-urlencode" onclick="Encoder.unescape('input');">unescape()</button> 
                     <select id="encdec" onblur="setTimeout('document.getElementById(\'encdec\').selectedIndex=0',7000)">
                         <option>--Encoder/Decoder--</option>
                         <optgroup label="Encode">                            
@@ -123,6 +124,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                             <option onclick="Encoder.toOctEnt('input');">to octal JS entities</option>
                             <option onclick="Encoder.toBase64('input');">to Base64</option>
                             <option onclick="Encoder.toBase62('input');">to Base62</option>
+                            <option onclick="Encoder.toUrlEncode('input');">to URI component encode</option>
                         </optgroup>
                         <optgroup label="Decode">                            
                             <option onclick="Encoder.fromDecEnt('input');">from decimal entities</option>
@@ -132,7 +134,8 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                             <option onclick="Encoder.fromSQLChar('input');">from SQL Char()</option>
                             <option onclick="Encoder.fromOctEnt('input');">from octal JS entities</option>
                             <option onclick="Encoder.fromBase64('input');">from Base64</option>
-                            <option onclick="Encoder.fromBase62('input');">from Base62</option>                  
+                            <option onclick="Encoder.fromBase62('input');">from Base62</option>  
+                            <option onclick="Encoder.fromUrlEncode('input');">from URI component encode</option>                
                         </optgroup>
                         <optgroup label="Convert">
                             <option onclick="Encoder.fromBsToEnt('input');">from \NN to &amp;#NN;</option>
@@ -167,7 +170,7 @@ if (isset($_GET['sendtohackvertor']) && strlen($_GET) > 0)
                 </fieldset>
 			</form>
 		</div>
-        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> 2007, 2008 - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/12/15</div>
+        <div id="footer">&copy; <a href="http://mario.heideri.ch/">.mario</a> <?php echo date('Y') ?> - <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fh4k.in%2Fencoding%2F">XHTML 1.0 Strict</a><br />Special thanks to <a href="http://yehg.org">d0ubl3_h3lix</a> for further improvements<br/>Last updated: 2008/12/15</div>
         <div id="selfpromotion">
             <h3>Other cool stuff:</h3>
             <ul>
