@@ -14,6 +14,13 @@ class Encoder_Request {
      *  gathered responde data
      */
     public $response = array();
+ 
+    /**
+     * 
+     */
+    public function __construct () {
+		
+	}       
     
     /**
      *  handles the incoming reqest and prepares the response array
@@ -28,56 +35,57 @@ class Encoder_Request {
             $this->response['inputtext'] = stripslashes($_POST['input-text']);
             $this->response['outputenc'] = $_POST['output-encoding'];
             
-            if ($this->response['outputenc'] == 'PUNYCODE') {
+            if ($this->response['outputenc'] == 'PUNYCODE')
+            {
 				$this->response['outputtext'] =  $this->punyencode($this->response['inputtext'],$this->response['inputenc']);
 							
-			} else if($this->response['inputenc'] == 'PUNYCODE') {
+			}
+			else if($this->response['inputenc'] == 'PUNYCODE')
+			{
 				$this->response['outputtext'] =	$this->punydecode($this->response['inputtext']);	
-			} else if ($this->response['outputenc'] == 'UUENCODE') {
+			}
+			// UUEncode in mb_convert_encoding doesn't actually do conversion!!
+			// That's why it seems php developers implemented a different function 
+			// called convert_uuencode. 
+            else if ($this->response['outputenc'] == 'UUENCODE')
+            {
 				$this->response['outputtext'] =  convert_uuencode($this->response['inputtext']);
 							
-			} else if($this->response['inputenc'] == 'UUENCODE') {
-				$this->response['outputtext'] =	convert_uudecode($this->response['inputtext']);	
-			} else {
-				    $this->response['outputtext'] = mb_convert_encoding(
-                    $this->response['inputtext'], 
-                    $this->response['outputenc'], 
-                    $this->response['inputenc']
-                );
 			}
+			else if($this->response['inputenc'] == 'UUENCODE')
+			{
+				$this->response['outputtext'] =	convert_uudecode($this->response['inputtext']);	
+			}			
+			else
+			{
+				$this->response['outputtext'] = mb_convert_encoding(
+                                                    $this->response['inputtext'], 
+                                                    $this->response['outputenc'], 
+                                                    $this->response['inputenc']);
+			}
+            
         } else {
+
             $this->response['inputenc'] = 'UTF-8';
             $this->response['inputtext'] = null;
             $this->response['outputenc'] = 'UTF-7';
             $this->response['outputtext'] = null;
         }        
+
         return true;
     }
-    
-    /**
-     * punyencode
-     * 
-     * @return 
-     * @param $inputtext Object
-     * @param $inputenc Object
-     */
-    public function punyencode($inputtext,$inputenc) {
-		require 'assets/php/vendors/idna_convert_060/idna_convert.class.php';
-		require 'assets/php/vendors/idna_convert_060/transcode_wrapper.php';
+    public function punyencode($inputtext,$inputenc)
+    {
+		require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+		require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
 	
 		$IDN = new idna_convert();	
 		return $IDN->encode(encode_utf8($inputtext,$inputenc));	
 	}	
-    
-    /**
-     * punydecode
-     * 
-     * @return 
-     * @param $inputtext Object
-     */
-    public function punydecode($inputtext) {
-		require 'assets/php/vendors/idna_convert_060/idna_convert.class.php';
-		require 'assets/php/vendors/idna_convert_060/transcode_wrapper.php';
+    public function punydecode($inputtext)
+    {
+		require_once('assets/php/vendors/idna_convert_060/idna_convert.class.php');
+		require_once('assets/php/vendors/idna_convert_060/transcode_wrapper.php');
 	
 		$IDN = new idna_convert();	
 		return $IDN->decode($this->response['inputtext']);		

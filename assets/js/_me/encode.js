@@ -12,7 +12,7 @@ Encoder.toCharCode = function (field){
                 charcode +=  ',';
             }
         }
-        document.getElementById(field + '-text').value = charcode;										
+        document.getElementById(efield + '-text').value = charcode;										
     }
     this.SetFocus(field);return false;
 }
@@ -25,6 +25,23 @@ Encoder.fromCharCode = function (field){
             output += String.fromCharCode(charcode[i]);
         }					
         document.getElementById(field + '-text').value = output;	
+    }
+    this.SetFocus(field);return false;
+}
+Encoder.escape = function (field){
+    var text = document.getElementById(field + '-text').value;
+    if(text.length > 0){
+        output = escape(text);
+        document.getElementById(field + '-text').value = output;
+    }
+    this.SetFocus(field);return false;
+}
+
+Encoder.unescape = function (field){
+    var text = document.getElementById(field + '-text').value;
+    if(text.length > 0){
+        output = unescape(text);
+        document.getElementById(field + '-text').value = output;
     }
     this.SetFocus(field);return false;
 }

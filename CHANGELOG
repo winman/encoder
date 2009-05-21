@@ -1,3 +1,7 @@
+[2009May21 by mario.heiderich@gmail.com]
+    - FIXED: JS Unicode encoding/decoding
+    - Added en/decodeURIComponent to dropdown
+    - Added escape/unescape to main interface
 [2008December15 by mario.heiderich@gmail.com]
     - FIXED: JS Unicode encoding/decoding
 [2008March23 by d0ubl3_h3lix@yehg.co.nr]
